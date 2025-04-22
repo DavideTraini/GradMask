@@ -1,14 +1,11 @@
-# SIGRATE-ViT-XAI
+# Grad-Mask
 
-This is the official implementation of the paper: Generating Masks from Similarity-based Graphs for Vision Transformer Explainability.
+This is the official implementation of the paper: Integrating Gradient and Mask-based Approaches for Vision Transformer Explainability.
 
 ## Abstract
 
-Vision Transformers (ViTs) are becoming the most used architecture to address computer vision tasks due to their outstanding performances. However, the interpretation of the ViT output is still a challenging task, but it is also fundamental to gain trust in these new architectures. In this paper, we want to address this specific task by proposing SIGRATE. Specifically, SIGRATE extracts the embeddings of the image patches and builds the corresponding similarity graph for each attention layer. Then, it generates a set of walks on each similarity graph, where the walk sources are the most relevant and irrelevant patches according to the attention paid by the classification token. Each walk corresponds to the selection of a subset of patches that then generates a binary mask. After that, SIGRATE merges the masks from all the attention layers thanks to the coverage bias formula into a heatmap, which then is reshaped to the same as the input image. Similar to other visual explainability approaches, we tested SIGRATE on two ViT architectures (i.e., ViT and DeiT) and a subset of the ImageNet validation set. The experiments show the promising performances of SIGRATE in terms of Insertion and Deletion metrics. Finally, we report a qualitative analysis to show the capabilities of SIGRATE on three images and an ablation study to evaluate the hyperparameters’ impact on the SIGRATE performance.
-
-![Multilayer creation](./Readme_images/Vit_architecture1.png)
-
-![Heatmap generation](./Readme_images/Vit_architecture2.png)
+Vision Transformers (ViTs) have demonstrated outstanding performance across different computer vision tasks thanks to their self-attention mechanism that captures long-range dependencies effectively. However, the inherent complexity of ViTs presents significant challenges in explaining their outputs, which is fundamental in safety-critical domains. To tackle the challenge of explaining ViT outputs, this paper presents GradMask, a novel method that integrates gradients into the mask generation process to create explanation heatmaps. GradMask uses the query, key, and value matrices from each attention layer and computes their gradients with respect to a target class. Afterward, it uses these gradients to generate binary masks, which are then weighted by the corresponding ViT's confidence scores. Finally, it combines the weighted masks to generate the resulting heatmap. Experimental evaluations on an ImageNet subset with ViT and DeiT (Data-efficient Image Transformer) architectures show that GradMask achieves competitive performance according to standard explainability metrics, such as Insertion, Deletion, and Pointing Game. A hyperparameter analysis confirms the high computational efficiency of GradMask, while an ablation study highlights the importance of combining gradients and masks for the generation of the explanation heatmap. Finally, a qualitative analysis shows the improved explainability of GradMask compared to existing methods, making it a promising approach for understanding ViTs.
+![Comparison-Methods](./Readme_images/Compare.jpg)
 
 
 
@@ -21,7 +18,7 @@ The code can be used both for ViT and DeiT explaination. In addition, this folde
 - **utils**: contains some functions used for the visualization of AUCs and heatmaps.
 - **feature_extractor**: contains the definition of the feature extractor class used by ViT and DeiT models.
 - **hook**: contains the definition of the hook classes used by ViT and DeiT models.
-- **sigrate**: contains the implementation of the model described in the paper.
+- **GradMask**: contains the implementation of the model described in the paper.
 
 The **imgs_idx** file contains the indexes of the images used for testing our approach, which are selected from the ImageNet 2012 validation dataset. To download the dataset you need to login on [ImageNet site](https://image-net.org/challenges/LSVRC/2012/2012-downloads.php) and click on ILSVRC2012, after this download the 'Development kit (Task 1 & 2)', that contains the ground truth labels, and the 'Validation images (all tasks)'.
 
@@ -34,8 +31,6 @@ In the **Usage_sample** file the user can modify the following parameters:
 **`device`**: device in which the model will be used; this can be _'cpu'_ or _'cuda:0'_;  
 
 ### Call Parameters
-**`token_ratio`**: percentage of patches which are set to 0 during the binary masks creation;  
-**`starting_layer`**: layer from which are calculated the metrics used to construct the masks;  
 **`masks_layer`**: number of masks for every layer;  
 **`img_path`**: path of the image we want to explain;  
 **`label`**: label on which we want to do explaination; this value is optional and if is not provided the model will give the heatmap associated with the predicted class;  
