@@ -5,6 +5,8 @@ This is the official implementation of the paper: Integrating Gradient and Mask-
 ## Abstract
 
 Vision Transformers (ViTs) have demonstrated outstanding performance across different computer vision tasks thanks to their self-attention mechanism that captures long-range dependencies effectively. However, the inherent complexity of ViTs presents significant challenges in explaining their outputs, which is fundamental in safety-critical domains. To tackle the challenge of explaining ViT outputs, this paper presents GradMask, a novel method that integrates gradients into the mask generation process to create explanation heatmaps. GradMask uses the query, key, and value matrices from each attention layer and computes their gradients with respect to a target class. Afterward, it uses these gradients to generate binary masks, which are then weighted by the corresponding ViT's confidence scores. Finally, it combines the weighted masks to generate the resulting heatmap. Experimental evaluations on an ImageNet subset with ViT and DeiT (Data-efficient Image Transformer) architectures show that GradMask achieves competitive performance according to standard explainability metrics, such as Insertion, Deletion, and Pointing Game. A hyperparameter analysis confirms the high computational efficiency of GradMask, while an ablation study highlights the importance of combining gradients and masks for the generation of the explanation heatmap. Finally, a qualitative analysis shows the improved explainability of GradMask compared to existing methods, making it a promising approach for understanding ViTs.
+
+
 ![Comparison-Methods](./Readme_images/Compare.jpg)
 
 
